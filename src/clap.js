@@ -29,14 +29,15 @@ class Clap {
         paramStr = paramStr.trim();
         const paramsStrLength = paramStr.length;
 
-        let inQuotation = false;
+        let inSingleQuotation = false;
+        let inDoubleQuotation = false;
         let viewSpace = false;
 
         for (let index = 0; index < paramsStrLength; index++) {
             let char = paramStr[index];
 
             if (char === '-') {
-                if (viewSpace && !inQuotation) { // 遍历到费字符串内的空格, 且再次访问到 '-', 视为前一段命令结束
+                if (viewSpace && (!inSingleQuotation || !inDoubleQuotation)) { // 遍历到费字符串内的空格, 且再次访问到 '-', 视为前一段命令结束
                     return paramStr.substring(0, index - 1);
                 }
                 continue;
@@ -48,11 +49,21 @@ class Clap {
             }
 
             if (char === '"') {
+                let preChar = paramStr[index - 1];
 
+                if (preChar !== '\\') {
+                    inDoubleQuotation = !inDoubleQuotation;
+                }
+
+                continue;
             }
 
             if (char === '\'') {
+                let preChar = paramStr[index - 1];
 
+                if (preChar !== '\\') {
+                    inSingleQuotation = !inSingleQuotation;
+                }
             }
         }
 
@@ -75,14 +86,21 @@ class Clap {
         }
 
         let key = str.substring(0, firstSpaceIndex);
-        let value = str.substr(firstSpaceIndex);
+        let value = str.substr(firstSpaceIndex).trim();
 
-        if (value.trim() === '') {
+        if (value === '') {
             value = true;
         }
 
+        // 去掉字符串头尾的引号
+        value = value.replace(/^['|"]/, '')
+            .replace(/['|"]$/, '');
+
+        // 去掉引号的转义字符
+        value = value.replace(/\\(["'])/g, '$1');
+
         return {
-            [camelCase(key)]: value
+            [camelCase(key)]: value.trim()
         };
     }
 
