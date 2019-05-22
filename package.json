@@ -1,0 +1,19 @@
+{
+  "name": "@lleohao/clap",
+  "version": "1.0.0",
+  "description": "command line args parser",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "parser",
+    "command-line"
+  ],
+  "author": "lleohao <lleohao@hotmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^24.0.13",
+    "jest": "^24.8.0"
+  }
+}
