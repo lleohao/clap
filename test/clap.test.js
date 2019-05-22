@@ -15,8 +15,8 @@ describe('command argument', () => {
     const cases = [
         {commandLine: 'command --a --b', expectValue: 'command'},
         {commandLine: '    command --a --b     ', expectValue: 'command'},
-        {commandLine: '--a', expectValue: null},
-        {commandLine: ' --a', expectValue: null}
+        {commandLine: '--flag', expectValue: null},
+        {commandLine: ' --flag --flag-boo', expectValue: null}
     ];
 
     cases.forEach(({commandLine, expectValue}) => {
@@ -35,23 +35,37 @@ describe('boolean argument', () => {
 
     test(`'--flag' => {flag: true}`, () => {
         clap.parse('--flag');
-        expect(clap.getParams()).toEqual({
+        expect(clap.params).toEqual({
             flag: true
         });
     });
 
     test(`'--flag-boo' => {flagBoo: true}`, () => {
         clap.parse('--flag-boo');
-        expect(clap.getParams()).toEqual({
+        expect(clap.params).toEqual({
             flagBoo: true
         });
     });
 
     test(`'   --flag     --flag-boo  ' => {flag: true, flagBoo: true}`, () => {
-
+        clap.parse('   --flag     --flag-boo  ');
+        expect(clap.params).toEqual({
+            flagBoo: true,
+            flag: true
+        });
     });
 });
 
 describe('string argument', () => {
+
+});
+
+test('runtime test', () => {
+    const query = `select * from "default.table", 'db1.table1' --union`;
+    const params = `--flag "${query}" --user lleo`;
+
+    let clap = new Clap();
+
+    clap.parse('import --flag  --query   ');
 
 });
