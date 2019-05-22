@@ -88,10 +88,6 @@ class Clap {
         let key = str.substring(0, firstSpaceIndex);
         let value = str.substr(firstSpaceIndex).trim();
 
-        if (value === '') {
-            value = true;
-        }
-
         // 去掉字符串头尾的引号
         value = value.replace(/^['|"]/, '')
             .replace(/['|"]$/, '');
